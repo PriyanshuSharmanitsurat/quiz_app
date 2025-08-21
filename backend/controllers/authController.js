@@ -1,27 +1,59 @@
-// controllers/authController.js
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import { createUser, findUserByUsernameOrEmail } from '../models/User.js';
 
+const SECRET_KEY = "shivam_secret"; // ⚠️ move to .env in production
+
+// Signup (hash password before saving)
 export const signup = async (req, res) => {
-  const { username, email, password } = req.body;
-  const existingUser = await findUserByUsernameOrEmail(username);
-  if (existingUser) return res.status(400).json({ message: 'Username or email already exists' });
+  try {
+    const { username, email, password } = req.body;
 
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await createUser({ username, email, password: hashedPassword });
+    // Check if username or email already exists
+    const existingUser = await findUserByUsernameOrEmail(username) 
+                      || await findUserByUsernameOrEmail(email);
 
-  res.status(201).json({ message: 'User created successfully', user });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Username or email already exists' });
+    }
+
+    // ✅ Hash password
+    const hashedPassword = await bcrypt.hash(password, 2);
+
+    // Create user with hashed password
+    const user = await createUser({ username, email, password: hashedPassword });
+
+    res.status(201).json({ message: 'User created successfully', user });
+  } catch (error) {
+    console.error("Signup error:", error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 };
 
+// Login with JWT
 export const login = async (req, res) => {
-  const { usernameOrEmail, password } = req.body;
-  const user = await findUserByUsernameOrEmail(usernameOrEmail);
-  if (!user) return res.status(400).json({ message: 'Invalid credentials' });
+  try {
+    const { usernameOrEmail, password } = req.body;
 
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+    const user = await findUserByUsernameOrEmail(usernameOrEmail);
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
 
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-  res.json({ token, user });
+    if (user.password !== password) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // ✅ Generate JWT token
+    const token = jwt.sign(
+      { id: user.id, username: user.username, email: user.email },
+      SECRET_KEY,
+      { expiresIn: "1h" }
+    );
+
+    res.json({ token, user });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 };
