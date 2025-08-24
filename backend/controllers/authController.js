@@ -1,8 +1,11 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { createUser, findUserByUsernameOrEmail } from '../models/User.js';
+import dotenv from 'dotenv';
 
-const SECRET_KEY = "shivam_secret"; // ⚠️ move to .env in production
+
+const SECRET_KEY = process.env.SECRET_KEY;
+
 
 // Signup (hash password before saving)
 export const signup = async (req, res) => {

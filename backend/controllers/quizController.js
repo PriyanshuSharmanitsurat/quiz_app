@@ -1,6 +1,7 @@
 // controllers/quizController.js
 import { generateMCQs } from "../utils/geminiClient.js";
 import {pool} from "../config/db.js";
+import dotenv from 'dotenv';
 
 
 
@@ -69,6 +70,39 @@ export const submitQuiz = async (req, res) => {
 };
 
 const fetchYouTubeVideo = async (topic) => {
-  // Implement YouTube API call to fetch the first video link for the given topic
-  return "https://www.youtube.com/watch?v=example";
+    try {
+        // Replace with your actual YouTube Data API key
+        const API_KEY = process.env.API_KEY;
+        
+        // Encode the topic for URL
+        const encodedTopic = encodeURIComponent(topic);
+        
+        // Make API request to search for videos
+        const response = await fetch(
+            `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${encodedTopic}&maxResults=1&key=${API_KEY}`
+        );
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // Check if any videos were found
+        if (data.items && data.items.length > 0) {
+            const videoId = data.items[0].id.videoId;
+            console.log('hi')
+            console.log(`https://www.youtube.com/watch?v=${videoId}`)
+
+            return `https://www.youtube.com/watch?v=${videoId}`;
+        } else {
+            throw new Error('No videos found for the given topic');
+        }
+        
+    } catch (error) {
+        console.error('Error fetching YouTube video:', error);
+        throw error; // Re-throw the error for the caller to handle
+    }
 };
+
+

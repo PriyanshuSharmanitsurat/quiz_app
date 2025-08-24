@@ -1,8 +1,10 @@
 import {pool} from "../config/db.js";
 import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
 
-const ADMIN_USERNAME = "admin123";
-const ADMIN_PASSWORD = "secure@admin";
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
+const ADMIN_PASSWORD = process.env.a
+;
 
 export const adminLogin = (req, res) => {
   const { username, password } = req.body;
