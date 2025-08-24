@@ -44,7 +44,7 @@ const Quiz = ({ quizData }) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:5000/api/quiz/submit",
+        "https://quiz-app-1-pr6l.onrender.com/api/quiz/submit",
         {
           quizId: quizData.quizId,
           userAnswers,

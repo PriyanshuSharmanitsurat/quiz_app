@@ -21,7 +21,7 @@ const Signup = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/signup', form);
+      const response = await axios.post('https://quiz-app-1-pr6l.onrender.com/api/auth/signup', form);
       localStorage.setItem("token", response.data.token);
       navigate('/dashboard');
     } catch (err) {

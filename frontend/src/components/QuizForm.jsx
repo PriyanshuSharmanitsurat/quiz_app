@@ -29,7 +29,7 @@ const QuizForm = () => {
       setIsLoading(true);
 
       const response = await axios.post(
-        "http://localhost:5000/api/quiz/start",
+        "https://quiz-app-1-pr6l.onrender.com/api/quiz/start",
         formData,
         {
           headers: {

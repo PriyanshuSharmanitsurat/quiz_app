@@ -16,7 +16,7 @@ const Dashboard = () => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/users/notification", {
+      const res = await axios.get("https://quiz-app-1-pr6l.onrender.com/api/users/notification", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

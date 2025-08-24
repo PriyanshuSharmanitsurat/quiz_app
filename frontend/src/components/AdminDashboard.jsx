@@ -12,7 +12,7 @@ const AdminDashboard = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/admin/users", {
+      const res = await axios.get("https://quiz-app-1-pr6l.onrender.com/api/admin/users", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -29,7 +29,7 @@ const AdminDashboard = () => {
 
   const sendNotification = async () => {
     await axios.post(
-      "http://localhost:5000/api/admin/notify",
+      "https://quiz-app-1-pr6l.onrender.com/api/admin/notify",
       {
         userId: selectedUser,
         message,

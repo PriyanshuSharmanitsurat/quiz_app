@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Eye, EyeOff, User, Lock, LogIn } from "lucide-react"
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [form, setForm] = useState({ usernameOrEmail: "", password: "" })
@@ -26,8 +27,8 @@ const Login = () => {
 
     try {
       const url = isAdmin
-        ? "http://localhost:5000/api/admin/login"
-        : "http://localhost:5000/api/auth/login"
+        ? "https://quiz-app-1-pr6l.onrender.com/api/admin/login"
+        : "https://quiz-app-1-pr6l.onrender.com/api/auth/login"
 
       const res = await fetch(url, {
         method: "POST",
@@ -158,7 +159,7 @@ const Login = () => {
         <div style={styles.footer}>
           <p style={styles.footerText}>
             Don&apos;t have an account?
-            <a href="http://localhost:5173/signup" style={styles.link}> Sign up</a>
+            <Link to="/signup" style={styles.link}>Sign up</Link>
           </p>
         </div>
       </div>
