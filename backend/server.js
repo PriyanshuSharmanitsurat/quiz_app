@@ -5,8 +5,7 @@ import authRoutes from './routes/authRoutes.js';
 import quizRoutes from './routes/quizRoutes.js'
 import adminRoute from './routes/adminRoute.js'
 import userRoute from './routes/userRoute.js'
-import dns from "dns";
-dns.setDefaultResultOrder("ipv4first");
+
 
 
 dotenv.config();
