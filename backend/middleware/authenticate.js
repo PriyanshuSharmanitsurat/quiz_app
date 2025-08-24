@@ -1,39 +1,34 @@
 // middleware/authenticate.js
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
+const SECRET_KEY = process.env.SECRET_KEY || "test_secret_key"; // keep consistent
 
 const authenticate = (req, res, next) => {
   const authHeader = req.headers.authorization;
   let token;
 
+  // Extract token if present
   if (authHeader && authHeader.startsWith("Bearer ")) {
     token = authHeader.split(" ")[1];
   }
 
   if (!token) {
-    // ✅ No token → assign fake user with numeric ID
-    req.user = {
-      id: 0, // integer (safe default for guest user)
-      username: "guest_user",
-      role: "guest",
-    };
-    return next();
+    // ❌ No token → reject request
+    return res.status(401).json({ message: "Access denied. No token provided." });
   }
 
   try {
     // ✅ Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "test_secret_key");
+    const decoded = jwt.verify(token, SECRET_KEY);
 
-    // Attach user data
-    req.user = decoded;
+    // Attach decoded user to request
+    req.user = decoded; // { id, username, email }
     next();
   } catch (error) {
-    // ✅ Invalid token → fallback to fake user
-    req.user = {
-      id: 8, // integer instead of string
-      username: "nn",
-      role: "guest",
-    };
-    next();
+    // ❌ Invalid token → reject request
+    return res.status(403).json({ message: "Invalid or expired token" });
   }
 };
 
