@@ -5,6 +5,7 @@ import authRoutes from './routes/authRoutes.js';
 import quizRoutes from './routes/quizRoutes.js'
 import adminRoute from './routes/adminRoute.js'
 import userRoute from './routes/userRoute.js'
+import resultRoute from './routes/resultRoute.js'
 
 
 
@@ -17,6 +18,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/quiz', quizRoutes);
 app.use('/api/admin',adminRoute);
 app.use('/api/users',userRoute);
+app.use("/api/quiz", resultRoute);
+
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on http://localhost:${process.env.PORT}`);
