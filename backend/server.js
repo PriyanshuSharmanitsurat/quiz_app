@@ -18,7 +18,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/quiz', quizRoutes);
 app.use('/api/admin',adminRoute);
 app.use('/api/users',userRoute);
-app.use("/api/quiz", resultRoute);
+app.use("/api/results", resultRoute);
 
 
 app.listen(process.env.PORT, () => {
